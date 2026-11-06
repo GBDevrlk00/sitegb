@@ -1,0 +1,335 @@
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>GB Produções · Painel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#050405;--red:#ff1f3d;--mute:rgba(255,255,255,.62);--line:rgba(255,255,255,.1);--hd:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif;--bd:'Hanken Grotesk','Helvetica Neue',Arial,sans-serif;--gl:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.03) 45%,rgba(255,255,255,.06));--edge:inset 0 1px 0 rgba(255,255,255,.3),inset 0 0 0 1px rgba(255,255,255,.06);color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+html{background:var(--ink);scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font:400 15px/1.5 var(--bd);color:#fff;min-height:100vh;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:rgba(5,4,5,.6);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);z-index:60}
+.bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(55% 45% at 85% -8%,rgba(255,31,61,.24),transparent 70%),radial-gradient(40% 35% at -5% 55%,rgba(180,0,30,.14),transparent 70%)}
+body::after{content:"";position:fixed;inset:0;z-index:70;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+h1,h2,h3{font-family:var(--hd);letter-spacing:-.035em;line-height:1.05}
+button,input{font:inherit;color:inherit}button{cursor:pointer}
+.glass{position:relative;border-radius:24px;border:1px solid rgba(255,255,255,.12);background:var(--gl),rgba(5,4,5,.45);box-shadow:var(--edge),0 20px 50px -30px #000;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:99px;font-weight:600;border:1px solid rgba(255,255,255,.18);background:var(--gl);box-shadow:var(--edge)}
+.btn.p{background:linear-gradient(180deg,rgba(255,80,105,.85),rgba(207,8,37,.78));border-color:rgba(255,255,255,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -10px 18px rgba(110,0,18,.4),0 10px 36px -12px var(--red)}
+.mute{color:var(--mute)}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:24px}
+#login .glass{width:min(420px,100%);padding:36px 28px;text-align:center;display:grid;gap:16px}
+#login img{height:64px;margin:0 auto}
+#err{color:#ff7a8c;font-size:13px;min-height:18px}
+/* app */
+#app{display:none;min-height:100vh;padding:20px;gap:20px;grid-template-columns:240px 1fr}
+#app.on{display:grid}
+aside{position:sticky;top:calc(env(safe-area-inset-top,0px) + 20px);height:calc(100vh - 40px);padding:22px 14px;display:flex;flex-direction:column;gap:6px}
+aside .logo{height:44px;margin:0 auto 22px}
+.nv{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:99px;border:1px solid transparent;background:none;text-align:left;color:var(--mute);width:100%}
+.nv:hover{color:#fff}.nv.on{color:#fff;border-color:rgba(255,255,255,.16);background:linear-gradient(180deg,rgba(255,31,61,.5),rgba(255,31,61,.14));box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 8px 30px -12px var(--red)}
+.nv svg,.ic svg{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sp{flex:1}
+main{min-width:0;display:grid;gap:20px;align-content:start}
+.top{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 12px 10px 20px;border-radius:99px}
+.top input{flex:1;min-width:0;background:none;border:0;outline:0}
+.av{display:flex;align-items:center;gap:10px;padding:4px 14px 4px 4px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.av b{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#ff3a55,#cf0825);font:700 14px var(--hd)}
+.av small{display:block;font-size:12px;color:var(--mute);line-height:1.1}
+.hello{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;padding:8px 6px}
+.hello h1{font-size:clamp(30px,5vw,46px);font-weight:800}
+.plan{display:flex;gap:12px;align-items:center;padding:14px 20px;border-radius:20px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+.st{padding:20px;display:grid;gap:14px}
+.ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;color:#ff5a72;background:rgba(255,31,61,.14);border:1px solid rgba(255,31,61,.35);box-shadow:0 0 24px -6px rgba(255,31,61,.6)}
+.st b{font:800 30px/1 var(--hd);letter-spacing:-.03em;display:block}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px}
+.pnl{padding:22px;display:grid;gap:14px;align-content:start}
+.pnl h2{font-size:20px;font-weight:700}
+.row{display:grid;grid-template-columns:56px 1fr auto;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.row .th{width:56px;height:42px;border-radius:10px;background:radial-gradient(120% 90% at 20% 0%,rgba(255,31,61,.8),transparent 65%),linear-gradient(180deg,#1b0b0e,#050405);border:1px solid var(--line)}
+.bar{height:6px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#9a0a22,var(--red));box-shadow:0 0 12px var(--red)}
+.tag{font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);white-space:nowrap}
+.tag.r{color:#ff8a9a;border-color:rgba(255,31,61,.4);background:rgba(255,31,61,.12)}.tag.g{color:#6ee7a0;border-color:rgba(110,231,160,.35);background:rgba(110,231,160,.1)}
+.act{display:grid;gap:14px}.act div{display:flex;gap:12px}.act i{width:9px;height:9px;margin-top:7px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);flex:none}
+.act small{color:var(--mute)}
+.chart{width:100%;height:auto}
+.leg{display:grid;gap:8px;font-size:14px}.leg span{display:flex;justify-content:space-between;gap:16px}.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.big{font:800 clamp(40px,6vw,56px)/1 var(--hd);letter-spacing:-.04em;background:linear-gradient(180deg,#ff3a52,#9a0a22);-webkit-background-clip:text;background-clip:text;color:transparent}
+.help{padding:14px;border-radius:18px;background:linear-gradient(160deg,rgba(255,31,61,.3),rgba(255,31,61,.05));border:1px solid rgba(255,31,61,.3);font-size:13px;display:grid;gap:8px}
+@media(max-width:900px){
+#app{grid-template-columns:1fr;padding:14px 14px 96px}
+aside{position:fixed;inset:auto 12px calc(env(safe-area-inset-bottom,0px) + 10px);height:auto;flex-direction:row;padding:6px;z-index:50;border-radius:99px;overflow-x:auto}
+aside .logo,aside .sp,aside .help,.nv span{display:none}.nv{justify-content:center;padding:12px;width:auto;flex:1}
+.cols{grid-template-columns:1fr}.av span{display:none}}
+
+#login{min-height:100vh;display:grid;place-items:center;padding:24px}
+.ac{width:min(460px,100%);padding:34px 30px;display:grid;gap:16px;border-color:rgba(255,31,61,.4);box-shadow:var(--edge),0 0 80px -30px var(--red),0 30px 60px -30px #000;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,31,61,.1) 70%,rgba(255,31,61,.2)),rgba(5,4,5,.55)}
+.ac img{height:64px;margin:0 auto 10px}.ac h1{font-size:30px;font-weight:800;text-align:center}.ac h1 em{font-style:normal;color:var(--red)}.ac>p{text-align:center}
+.fld{display:flex;align-items:center;gap:12px;padding:0 16px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04)}
+.fld:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(255,31,61,.2)}
+.fld svg{width:18px;height:18px;flex:none;stroke:var(--mute);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fld input,textarea{flex:1;min-width:0;padding:15px 0;background:none;border:0;outline:0;width:100%}
+.eye{background:none;border:0;padding:0;display:grid}
+.ac .btn{justify-content:center;width:100%;padding:15px}
+.er{color:#ff7a8c;font-size:13px;min-height:18px;text-align:center}
+.lnk{background:none;border:0;color:var(--red);text-decoration:underline;padding:0}
+.rw{display:flex;justify-content:space-between;gap:12px;font-size:14px;flex-wrap:wrap}
+.rw label{display:flex;gap:8px;align-items:center}input[type=checkbox]{accent-color:var(--red);width:16px;height:16px}
+.ft{text-align:center;font-size:14px;padding-top:14px;border-top:1px solid var(--line)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pc{position:relative;cursor:pointer;display:grid;gap:4px;justify-items:center;text-align:center;padding:14px 6px;border-radius:16px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);font-size:11px;color:var(--mute)}
+.pc b{color:#fff;font-size:14px}.pc svg{width:20px;height:20px;stroke:var(--red);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.pc input{position:absolute;opacity:0;pointer-events:none}.pc:has(input:checked){border-color:var(--red);background:rgba(255,31,61,.14);box-shadow:0 0 30px -8px var(--red)}
+.pc small{font-size:11px;color:#ff8a9a}
+.ul{display:grid;gap:8px;list-style:none;padding:0}.ul li{display:flex;gap:10px;align-items:center}.ul svg{width:18px;height:18px;stroke:#ff5a72;fill:none;stroke-width:2;flex:none}
+.bub{max-width:85%;padding:12px 16px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.05);white-space:pre-wrap;overflow-wrap:anywhere}
+.bub.me{margin-left:auto;background:linear-gradient(180deg,rgba(255,80,105,.5),rgba(207,8,37,.4));border-color:rgba(255,255,255,.25)}
+.bub small{display:block;opacity:.7;font-size:11px;margin-bottom:2px}
+.thread{display:grid;gap:10px}
+textarea{resize:vertical;min-height:80px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.04);font:inherit;color:inherit}
+.tk{cursor:pointer;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.nb{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:99px;background:var(--red);font-size:11px;display:grid;place-items:center}
+.sm{padding:6px 12px;font-size:13px}
+.gap{display:grid;gap:12px}
+@media(max-width:900px){.nb{position:absolute;top:2px;right:6px}.nv{position:relative}}
+
+/* ===== ajustes mobile ===== */
+main{grid-template-columns:minmax(0,1fr)}
+body,#login,#app{min-height:100vh;min-height:100dvh}
+.tk>div:first-child{min-width:0;overflow-wrap:anywhere}
+@media(max-width:900px){
+#app{grid-template-columns:minmax(0,1fr);padding:14px 14px calc(env(safe-area-inset-bottom,0px) + 96px)}
+#app aside{position:fixed;inset:auto 12px calc(env(safe-area-inset-bottom,0px) + 10px);height:auto;flex-direction:row;justify-content:space-around;gap:2px;padding:6px;z-index:50;border-radius:99px;overflow-x:auto;scrollbar-width:none}
+#app aside::-webkit-scrollbar{display:none}
+.nv{min-width:44px;min-height:44px}
+#view{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+input:not([type=checkbox]):not([type=radio]),textarea{font-size:16px}
+}
+@media(max-width:560px){
+#app{padding-inline:12px}
+.top{padding:8px 8px 8px 16px}
+.av{padding:4px}.av>div{display:none}
+.hello h1{font-size:30px}
+.grid4{gap:12px}
+.st{padding:16px}.st b{font-size:26px;overflow-wrap:anywhere}
+.pnl{padding:18px}
+#login{padding:16px}
+#login .ac{padding:28px 20px}
+.plans{grid-template-columns:1fr}
+.pc{grid-template-columns:auto 1fr;justify-items:start;text-align:left;column-gap:12px;padding:14px 16px}
+.pc svg{grid-row:span 3;align-self:center}
+}
+@media(pointer:coarse){.btn.sm{padding:10px 16px;min-height:40px}}
+
+/* ===== configurações ===== */
+.cfgv{display:grid;gap:16px;min-width:0}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start}
+.lb{font-size:13px;color:var(--mute)}
+.cn{font-size:13px;min-height:18px;color:var(--mute)}
+.kv{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.kv>span:first-child{min-width:0;overflow-wrap:anywhere}
+.fld select{flex:1;min-width:0;background:none;border:0;color:inherit;font:inherit;padding:15px 0;outline:0}.fld select option{color:#111}.fld input[type=file]{padding:12px 0}.fld input[type=date]{color-scheme:dark}video{max-width:100%}
+.btn:disabled{opacity:.45;filter:grayscale(.8);box-shadow:none;cursor:not-allowed;pointer-events:none}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.1.0/dist/tus.min.js"></script></head><body><div class="bg"></div>
+<section id="login"></section>
+<div id="app">
+<aside class="glass"><img class="logo" id="lg" width="77" height="44" alt="GB"><nav id="nav" style="display:contents"></nav><div class="sp"></div><button class="nv" id="out"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Sair do painel</span></button></aside>
+<main><div class="top glass"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input placeholder="Buscar…"><div class="av"><b id="ini"></b><div><span id="nm"></span><small id="rl"></small></div></div></div>
+<div id="view"></div></main></div>
+<script>
+const LOGO="logo-gb.png",ADMIN="7zsbrabos@gmail.com";
+const mem={},ld=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return mem[k]??d}},sv=(k,v)=>{mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const hash=async s=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('gb:'+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(unescape(encodeURIComponent('gb:'+s)))}};
+const P={home:'<path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',users:'<circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6"/>',folder:'<path d="M3 6a2 2 0 0 1 2-2h4l2 3h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',chat:'<path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6A8 8 0 1 1 21 12z"/>',check:'<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',play:'<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/>',web:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',crown:'<path d="m3 8 4 4 5-7 5 7 4-4-2 11H5z"/>',bolt:'<path d="M13 2 4 14h7l-1 8 9-12h-7z"/>',code:'<path d="m8 8-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>'};
+const I=n=>`<svg viewBox="0 0 24 24">${P[n]}</svg>`;
+const PL={master:{n:'Master',d:'Audiovisual completo',v:15,l:1,pri:1,ic:'crown',perks:['15 vídeos','1 landing page ou site','Suporte prioritário']},pro:{n:'Pro',d:'Projetos sob medida',v:6,l:0,pri:0,ic:'bolt',perks:['6 vídeos']},dev:{n:'Dev',d:'Desenvolvimento web',v:0,l:1,pri:0,ic:'code',perks:['1 landing page ou site']}};
+const NAV={admin:[['home','Dashboard'],['users','Clientes'],['folder','Projetos'],['chat','Suporte'],['gear','Configurações']],client:[['home','Visão Geral'],['folder','Meus Projetos'],['chat','Suporte'],['gear','Configurações']]};
+const $=s=>document.querySelector(s),now=()=>new Date().toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+let me=null,page=0,tk=null,mode='login',msg='';
+const SB_URL="https://uwfzcbomuwbxvfrubwjd.supabase.co",SB_KEY="sb_publishable_xfAQPmXZ_39jrV5hgLkT1Q_3uXNmRqZ";
+const stg={getItem:k=>{try{return sessionStorage.getItem(k)??localStorage.getItem(k)}catch(e){return null}},setItem:(k,v)=>{try{(localStorage.getItem('gb_rem')=='0'?sessionStorage:localStorage).setItem(k,v)}catch(e){}},removeItem:k=>{try{sessionStorage.removeItem(k);localStorage.removeItem(k)}catch(e){}}};
+const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{storage:stg,detectSessionInUrl:true}});
+let CL=[],TK=[];const clients=()=>CL,tickets=()=>TK;
+const fmt=d=>new Date(d).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+const toU=p=>({id:p.id,name:p.name,email:p.email,role:p.role,plan:p.plan,used:{v:p.used_videos,l:p.used_sites}});
+async function refresh(){const[a,b]=await Promise.all([me.role=='admin'?sb.from('profiles').select('*').eq('role','client').order('created_at'):Promise.resolve({data:[]}),sb.from('tickets').select('*, ticket_messages(*)').order('created_at',{ascending:false})]);
+CL=(a.data||[]).map(toU);TK=(b.data||[]).map(t=>({id:t.id,email:t.email,name:t.name,plan:t.plan,pri:t.pri?1:0,subject:t.subject,status:t.status,at:fmt(t.created_at),msgs:(t.ticket_messages||[]).sort((x,y)=>x.id-y.id).map(m=>({from:m.from_role,text:m.text,at:fmt(m.created_at)}))}))}
+const ST={aberto:['Aberto','r'],respondido:['Respondido',''],resolvido:['Resolvido','g']};
+/* AUTH */
+const fld=(i,t,id,ph,ex='')=>`<div class="fld">${I(i)}<input id="${id}" type="${t}" placeholder="${ph}" required ${ex}>${t=='password'?`<button type="button" class="eye" data-a="eye" aria-label="Mostrar senha">${I('eye')}</button>`:''}</div>`;
+function auth(){const L=mode=='login';$('#login').innerHTML=`<form class="glass ac" id="af"><img src="${LOGO}" width="112" height="64" alt="GB Produções"><h1>${L?'Faça seu <em>login</em>':'Crie sua <em>conta</em>'}</h1><p class="mute">${L?'Acesse seu painel e acompanhe seus projetos.':'Escolha seu plano e tenha acesso ao seu painel.'}</p>
+${L?'':fld('user','text','an','Seu nome','autocomplete="name"')}${fld('mail','email','ae','Seu e-mail','autocomplete="email"')}${fld('lock','password','ap','Sua senha',L?'':'minlength="6"')}
+${L?`<div class="rw"><label><input type="checkbox" id="ar" checked>Lembrar de mim</label><button type="button" class="lnk" data-a="forgot">Esqueceu sua senha?</button></div>`:`<div><b style="font-size:14px">Escolha seu plano</b><div class="plans" style="margin-top:10px">${Object.entries(PL).map(([k,p],i)=>`<label class="pc"><input type="radio" name="pl" value="${k}" ${i?'':'checked'}>${I(p.ic)}<b>${p.n}</b>${p.d}<small>${p.perks.join(' · ')}</small></label>`).join('')}</div></div>`}
+<div class="er" id="er">${esc(msg)}</div><button class="btn p" type="submit">${L?'Entrar':'Criar conta'} →</button>
+<div class="ft"><span class="mute">${L?'Não tem uma conta?':'Já tem uma conta?'}</span> <button type="button" class="lnk" data-a="mode">${L?'Criar conta':'Fazer login'}</button></div></form>`;msg=''}
+async function submitAuth(){const L=mode=='login',e=$('#ae').value.trim().toLowerCase(),pw=$('#ap').value,er=$('#er');er.style.color='';er.textContent='Aguarde…';
+try{localStorage.setItem('gb_rem',L&&!$('#ar').checked?'0':'1')}catch(x){}
+if(L){const{data,error}=await sb.auth.signInWithPassword({email:e,password:pw});if(error)return er.textContent=/confirm/i.test(error.message)?'Confirme seu e-mail antes de entrar.':'E-mail ou senha incorretos.';return start(data.session)}
+const{data,error}=await sb.auth.signUp({email:e,password:pw,options:{data:{name:$('#an').value.trim(),plan:document.querySelector('[name=pl]:checked').value}}});
+if(error)return er.textContent=/registered/i.test(error.message)?'Este e-mail já está cadastrado.':error.message;
+if(!data.session){er.style.color='#6ee7a0';return er.textContent='Conta criada! Confirme pelo link enviado ao seu e-mail e depois faça login.'}
+start(data.session)}
+async function start(s){const{data:p}=await sb.from('profiles').select('*').eq('id',s.user.id).single();if(!p){await sb.auth.signOut();return $('#er')&&($('#er').textContent='Não foi possível carregar seu perfil.')}
+me=toU(p);await refresh();enter(me)}
+function enter(u){me=u;page=0;tk=null;$('#login').style.display='none';$('#app').classList.add('on');const n=u.name.split(' ')[0];$('#ini').textContent=n[0].toUpperCase();$('#nm').textContent=n;$('#rl').textContent=u.role=='admin'?'Administrador':'Plano '+PL[u.plan].n;draw()}
+async function logout(){await sb.auth.signOut();me=null;$('#app').classList.remove('on');$('#login').style.display='grid';mode='login';auth()}
+/* PIECES */
+const stat=(i,v,l)=>`<div class="glass st"><div class="ic">${I(i)}</div><div><b>${v}</b><span class="mute">${l}</span></div></div>`;
+const bar=(l,u,q)=>`<div><div style="display:flex;justify-content:space-between"><b>${l}</b><span class="mute">${u} de ${q} usados</span></div><div class="bar"><i style="width:${Math.min(100,u/q*100)}%"></i></div></div>`;
+const tg=t=>`<span class="tag ${ST[t.status][1]}">${ST[t.status][0]}</span>`;
+const sortT=a=>[...a].sort((x,y)=>(x.status=='resolvido')-(y.status=='resolvido')||y.pri-x.pri||y.id-x.id);
+const donut=()=>{const c=clients(),n=c.length,col={master:'#ff1f3d',pro:'#b4001e',dev:'#6b0716'};let off=0;const seg=Object.keys(PL).map(k=>{const p=n?c.filter(x=>x.plan==k).length/n*100:0,s=`<circle cx="21" cy="21" r="15.9" stroke="${col[k]}" stroke-dasharray="${p} ${100-p}" stroke-dashoffset="${-off}"/>`;off+=p;return s}).join('');
+return`<div style="display:flex;gap:28px;align-items:center;flex-wrap:wrap"><svg width="130" height="130" viewBox="0 0 42 42"><g fill="none" stroke-width="5" transform="rotate(-90 21 21)"><circle cx="21" cy="21" r="15.9" stroke="rgba(255,255,255,.08)"/>${seg}</g><text x="21" y="22" text-anchor="middle" fill="#fff" font-size="8" font-weight="800">${n}</text><text x="21" y="28" text-anchor="middle" fill="#aaa" font-size="3.2">Clientes</text></svg><div class="leg" style="flex:1;min-width:150px">${Object.keys(PL).map(k=>`<span><b><i style="background:${col[k]}"></i>${PL[k].n}</b>${c.filter(x=>x.plan==k).length}</span>`).join('')}</div></div>`};
+const tlist=(a,empty)=>a.length?a.map(t=>`<div class="tk" data-a="tk" data-id="${t.id}"><div><b>${esc(t.subject)}</b> ${t.pri?'<span class="tag r">Prioritário</span>':''}<div class="mute" style="font-size:13px">${esc(t.name)} · ${t.at}</div></div>${tg(t)}</div>`).join(''):`<p class="mute">${empty}</p>`;
+/* VIEWS */
+function adminHome(){const c=clients(),T=tickets(),o=T.filter(t=>t.status!='resolvido');return`<div class="hello"><div><h1>Bem-vindo, Admin!</h1><p class="mute">Aqui está um resumo da sua operação.</p></div></div>
+<div class="grid4">${stat('users',c.length,'Clientes cadastrados')}${stat('play',c.reduce((s,x)=>s+x.used.v,0),'Vídeos entregues')}${stat('chat',o.length,'Chamados abertos')}${stat('star',o.filter(t=>t.pri).length,'Suporte prioritário')}</div>
+<div class="cols"><div class="glass pnl"><h2>Chamados em espera</h2>${tlist(sortT(o).slice(0,4),'Nenhum chamado aberto. 🎉')}</div><div class="glass pnl"><h2>Plano dos clientes</h2>${donut()}</div></div>`}
+function clientHome(){const p=PL[me.plan],o=tickets().filter(t=>t.email==me.email&&t.status!='resolvido').length;return`<div class="hello"><div><h1>Olá, ${esc(me.name.split(' ')[0])}!</h1><p class="mute">Bem-vindo ao seu painel.</p></div><div class="glass plan"><span class="ic">${I(p.ic)}</span><div><b>Plano ${p.n}</b><div class="mute" style="font-size:12px">${p.d}</div></div></div></div>
+<div class="grid4">${p.v?stat('play',p.v-me.used.v,'Vídeos restantes'):''}${p.l?stat('web',p.l-me.used.l,'Landing page / site'):''}${stat('chat',o,'Chamados abertos')}${stat('star',p.pri?'Prioritário':'Padrão','Tipo de suporte')}</div>
+<div class="cols"><div class="glass pnl"><h2>Seu plano</h2><ul class="ul">${p.perks.map(x=>`<li>${I('check')}${x}</li>`).join('')}</ul></div><div class="glass pnl"><h2>Precisa de ajuda?</h2><p class="mute">Abra um chamado e nossa equipe responde por aqui.</p><button class="btn p" data-a="goSup" style="justify-self:start">Abrir chamado →</button></div></div>`}
+function clientesV(){const c=clients();return`<div class="glass pnl"><h2>Clientes</h2>${c.length?c.map(x=>{const p=PL[x.plan];return`<div class="tk" style="cursor:default;flex-wrap:wrap"><div><b>${esc(x.name)}</b> <span class="tag r">${p.n}</span><div class="mute" style="font-size:13px">${esc(x.email)}</div></div><div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">${p.v?`<span>Vídeos ${x.used.v}/${p.v} <button class="btn sm" data-a="u" data-e="${esc(x.email)}" data-k="v" data-n="-1">−</button> <button class="btn sm" data-a="u" data-e="${esc(x.email)}" data-k="v" data-n="1">+</button></span>`:''}${p.l?`<span>Site ${x.used.l}/${p.l} <button class="btn sm" data-a="u" data-e="${esc(x.email)}" data-k="l" data-n="${x.used.l?-1:1}">${x.used.l?'−':'+'}</button></span>`:''}</div></div>`}).join(''):'<p class="mute">Nenhum cliente cadastrado ainda.</p>'}</div>`}
+function supportV(){const A=me.role=='admin',T=tickets(),t=T.find(x=>x.id==tk);
+if(t){return`<div class="glass pnl gap"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn sm" data-a="back">← Voltar</button>${tg(t)}</div><h2>${esc(t.subject)} ${t.pri?'<span class="tag r">Prioritário</span>':''}</h2><div class="mute" style="font-size:13px">${esc(t.name)} · ${esc(t.email)}</div>
+<div class="thread">${t.msgs.map(m=>`<div class="bub ${m.from==(A?'admin':'client')?'me':''}"><small>${m.from=='admin'?'Equipe GB':esc(t.name)} · ${m.at}</small>${esc(m.text)}</div>`).join('')}</div>
+${t.status=='resolvido'&&A?'':`<form id="rf" class="gap"><textarea id="rt" placeholder="Escreva sua resposta…" required></textarea><button class="btn p" style="justify-self:start">Enviar</button></form>`}
+${A?`<button class="btn sm" data-a="res" style="justify-self:start">${t.status=='resolvido'?'Reabrir chamado':'Marcar como resolvido'}</button>`:''}</div>`}
+const L=sortT(A?T:T.filter(x=>x.email==me.email));
+return`${A?'':`<div class="glass pnl gap"><h2>Novo chamado</h2>${PL[me.plan].pri?'<span class="tag r" style="justify-self:start">Suporte prioritário ativo</span>':''}<form id="nf" class="gap"><div class="fld"><input id="ns" placeholder="Assunto" required></div><textarea id="nt" placeholder="Descreva o que você precisa…" required></textarea><button class="btn p" style="justify-self:start">Enviar chamado</button></form></div>`}
+<div class="glass pnl"><h2>${A?'Chamados dos clientes':'Meus chamados'}</h2>${tlist(L,'Nenhum chamado por aqui.')}</div>`}
+function perfil(){const p=me.role=='admin'?null:PL[me.plan];return`<div class="glass pnl gap"><h2>Meu perfil</h2><div><b>${esc(me.name)}</b><div class="mute">${esc(me.email)}</div></div>${p?`<div><span class="tag r">Plano ${p.n}</span></div><ul class="ul">${p.perks.map(x=>`<li>${I('check')}${x}</li>`).join('')}</ul>`:'<span class="tag r" style="justify-self:start">Administrador</span>'}</div>`}
+const say=(el,t,k)=>{if(!el)return;el.style.color=k=='ok'?'#6ee7a0':k=='wait'?'var(--mute)':'#ff7a8c';el.textContent=t};
+const MAXV=50*1024*1024;
+const upVideo=(file,path,onP)=>new Promise(async(res,rej)=>{
+const{data:{session}}=await sb.auth.getSession();if(!session)return rej(new Error('Sessão expirada. Entre novamente.'));
+if(!window.tus)return rej(new Error('Biblioteca de upload não carregou. Verifique a internet e recarregue.'));
+const ref=SB_URL.replace('https://','').split('.')[0];
+const u=new tus.Upload(file,{endpoint:`https://${ref}.storage.supabase.co/storage/v1/upload/resumable`,retryDelays:[0,2000,5000,10000],
+headers:{authorization:`Bearer ${session.access_token}`,apikey:SB_KEY,'x-upsert':'false'},uploadDataDuringCreation:true,removeFingerprintOnSuccess:true,
+metadata:{bucketName:'videos',objectName:path,contentType:file.type||'video/mp4',cacheControl:'3600'},chunkSize:6*1024*1024,
+onError:e=>rej(new Error((e&&e.message)||'erro no upload')),onProgress:(a,b)=>onP&&onP(Math.round(a/b*100)),onSuccess:()=>res()});
+u.start()});
+const cfgOpen=()=>me&&NAV[me.role]&&NAV[me.role][page]&&NAV[me.role][page][1]=='Configurações';
+function exportCsv(){const c=clients(),q=v=>{v=String(v);if(/^[=+\-@\t\r]/.test(v))v="'"+v;return'"'+v.replace(/"/g,'""')+'"'},
+rows=[['Nome','E-mail','Plano','Vídeos usados','Sites usados'],...c.map(x=>[x.name,x.email,PL[x.plan].n,x.used.v,x.used.l])],
+csv='\ufeff'+rows.map(r=>r.map(q).join(';')).join('\r\n'),u=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})),l=document.createElement('a');
+l.href=u;l.download='clientes-gb.csv';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),1500);
+say($('#m3'),c.length?c.length+(c.length>1?' clientes exportados.':' cliente exportado.'):'Nenhum cliente para exportar ainda.',c.length?'ok':'')}
+function clientSettingsV(){const p=PL[me.plan],pend=PJ.filter(x=>x.user_id==me.id&&x.status!='entregue').length;
+return`<div class="cfgv"><div class="hello"><div><h1>Configurações</h1><p class="mute">Ajuste sua conta e acompanhe seu plano.</p></div></div>
+<div class="cfg">
+<div class="glass pnl gap"><h2>Minha conta</h2>
+<div class="kv"><span class="mute">${esc(me.email)}</span>${p?`<span class="tag r">Plano ${p.n}</span>`:''}</div>
+<form id="sf" class="gap"><label class="lb" for="cn">Nome</label>${fld('user','text','cn','Seu nome','autocomplete="name" maxlength="60" value="'+esc(me.name)+'"')}
+<div class="cn" id="m1" role="status"></div><button class="btn p" style="justify-self:start">Salvar nome</button></form></div>
+<div class="glass pnl gap"><h2>Segurança</h2>
+<form id="pf" class="gap"><label class="lb" for="np">Alterar senha (mínimo 6 caracteres)</label>${fld('lock','password','np','Nova senha','autocomplete="new-password" minlength="6"')}${fld('lock','password','np2','Repita a nova senha','autocomplete="new-password" minlength="6"')}
+<div class="cn" id="m2" role="status"></div><button class="btn p" style="justify-self:start">Alterar senha</button></form></div>
+${p?`<div class="glass pnl gap"><h2>Meu plano</h2>
+<div class="kv"><span><b>${p.n}</b><div class="mute" style="font-size:13px">${p.d}</div></span>${p.pri?'<span class="tag r">Prioritário</span>':''}</div>
+<ul class="ul">${p.perks.map(x=>`<li>${I('check')}${x}</li>`).join('')}</ul>
+${p.v?bar('Vídeos',Math.min(p.v,me.used.v+pend),p.v):''}${p.l?bar('Sites',Math.min(p.l,me.used.l),p.l):''}
+<p class="mute" style="font-size:13px">Solicitações em andamento já contam no seu limite. Para mudar de plano, fale com a equipe pelo Suporte.</p></div>`:''}
+</div></div>`}
+function settingsV(){if(me.role!='admin')return clientSettingsV();const c=clients(),T=tickets(),open=T.filter(t=>t.status!='resolvido').length;
+return`<div class="cfgv"><div class="hello"><div><h1>Configurações</h1><p class="mute">Ajuste sua conta e gerencie os dados do painel.</p></div></div>
+<div class="cfg">
+<div class="glass pnl gap"><h2>Minha conta</h2>
+<div class="kv"><span class="mute">${esc(me.email)}</span><span class="tag r">Administrador</span></div>
+<form id="sf" class="gap"><label class="lb" for="cn">Nome</label>${fld('user','text','cn','Seu nome','autocomplete="name" maxlength="60" value="'+esc(me.name)+'"')}
+<div class="cn" id="m1" role="status"></div><button class="btn p" style="justify-self:start">Salvar nome</button></form></div>
+<div class="glass pnl gap"><h2>Segurança</h2>
+<form id="pf" class="gap"><label class="lb" for="np">Alterar senha (mínimo 6 caracteres)</label>${fld('lock','password','np','Nova senha','autocomplete="new-password" minlength="6"')}${fld('lock','password','np2','Repita a nova senha','autocomplete="new-password" minlength="6"')}
+<div class="cn" id="m2" role="status"></div><button class="btn p" style="justify-self:start">Alterar senha</button></form></div>
+<div class="glass pnl gap"><h2>Planos e limites</h2>
+${Object.entries(PL).map(([k,p])=>`<div class="tk" style="cursor:default"><div><b>${p.n}</b> ${p.pri?'<span class="tag r">Prioritário</span>':''}<div class="mute" style="font-size:13px">${p.perks.join(' · ')}</div></div><span class="tag">${c.filter(x=>x.plan==k).length} ${c.filter(x=>x.plan==k).length==1?'cliente':'clientes'}</span></div>`).join('')}
+<p class="mute" style="font-size:13px">Os limites de cada plano são definidos no código do painel.</p></div>
+<div class="glass pnl gap"><h2>Dados</h2>
+<p class="mute">${c.length} ${c.length==1?'cliente cadastrado':'clientes cadastrados'} · ${open} ${open==1?'chamado aberto':'chamados abertos'}</p>
+<button class="btn" data-a="csv" style="justify-self:start">Exportar clientes (CSV)</button><div class="cn" id="m3" role="status"></div></div>
+</div></div>`}
+/* PROJETOS (solicitação do cliente + entrega do admin) */
+const KINDS=['Comerciais','Institucionais','Conteúdo para marcas','Redes sociais'],PS={solicitado:['Solicitado',''],producao:['Em produção',''],entregue:['Entregue','g']};
+let PJ=[],pj=null,nw=false,SU=['',''];
+const _rf=refresh;refresh=async()=>{await _rf();
+if(me.role!='admin'){const{data:pp}=await sb.from('profiles').select('*').eq('id',me.id).single();if(pp)me=toU(pp)}
+const{data}=await sb.from('projects').select('*, profiles(name,email)').order('created_at',{ascending:false});PJ=data||[]};
+const dts=d=>d?d.split('-').reverse().join('/'):'—',okUrl=u=>/^https?:\/\//i.test(u||'');
+const pjTag=p=>`<span class="tag ${PS[p.status][1]}">${PS[p.status][0]}</span>`;
+const pjList=(a,A,empty)=>a.length?a.map(p=>`<div class="tk" data-a="pj" data-id="${p.id}"><div><b>${esc(p.name)}</b><div class="mute" style="font-size:13px">${A&&p.profiles?esc(p.profiles.name)+' · ':''}${esc(p.kind)} · ${fmt(p.created_at)}</div></div>${pjTag(p)}</div>`).join(''):`<p class="mute">${empty}</p>`;
+const pjForm=()=>`<form id="rq" class="glass pnl gap"><h2>Solicitar projeto</h2>
+<label class="lb" for="qk">Tipo de vídeo</label><div class="fld"><select id="qk" required>${KINDS.map(k=>`<option>${k}</option>`).join('')}</select></div>
+<div class="fld"><input id="qn" placeholder="Nome do projeto" maxlength="60" required></div>
+<textarea id="qb" placeholder="Briefing: o que você quer comunicar?" required></textarea>
+<label class="lb" for="qf">Formato</label><div class="fld"><select id="qf"><option>Vertical 9:16</option><option>Horizontal 16:9</option><option>Quadrado 1:1</option></select></div>
+<label class="lb" for="qd">Prazo desejado</label><div class="fld"><input id="qd" type="date" required></div>
+<div class="fld"><input id="ql" type="url" placeholder="Link dos materiais (Drive, WeTransfer)"></div>
+<div class="cn" id="m4" role="status"></div><div style="display:flex;gap:10px"><button class="btn p">Enviar solicitação</button><button type="button" class="btn" data-a="pjx">Cancelar</button></div></form>`;
+function pjView(A){
+const p=PJ.find(x=>x.id==pj);if(!p){pj=null;return''}
+const vid=SU[0]?`<video controls playsinline preload="metadata" src="${SU[0]}" style="width:100%;border-radius:16px;background:#000"></video><a class="btn p" href="${SU[1]}" download>Baixar vídeo</a>`:'',
+lk=okUrl(p.video_link)?`<a class="btn p" href="${esc(p.video_link)}" target="_blank" rel="noopener">Abrir vídeo</a>`:'';
+return`<div class="glass pnl gap"><button class="btn sm" style="justify-self:start;width:auto" data-a="pjb">‹ Voltar</button><h2>${esc(p.name)}</h2>
+<div>${pjTag(p)} <span class="tag">${esc(p.kind)}</span> <span class="tag">${esc(p.format||'')}</span> <span class="tag">Prazo ${dts(p.deadline)}</span></div>
+${A&&p.profiles?`<div class="mute">${esc(p.profiles.name)} · ${esc(p.profiles.email)}</div>`:''}<p style="white-space:pre-wrap">${esc(p.brief||'')}</p>
+${okUrl(p.link)?`<a class="mute" href="${esc(p.link)}" target="_blank" rel="noopener">Materiais do cliente</a>`:''}</div>
+${p.status=='entregue'?`<div class="glass pnl gap"><h2>${A?'Vídeo enviado ao cliente':'Seu vídeo está pronto'}</h2>${vid}${lk}</div>`
+:A?`<div class="glass pnl gap"><h2>Status</h2><div style="display:flex;gap:10px"><button class="btn ${p.status=='solicitado'?'p':''}" data-a="ps" data-s="solicitado">Solicitado</button><button class="btn ${p.status=='producao'?'p':''}" data-a="ps" data-s="producao">Em produção</button></div></div>
+<form id="df" class="glass pnl gap"><h2>Enviar vídeo ao cliente</h2><label class="lb" for="vf">Arquivo de vídeo</label><div class="fld"><input id="vf" type="file" accept="video/*"></div><p class="mute" style="font-size:13px;margin:0">Envio direto: até 50 MB. Vídeo maior? Suba no Drive/Vimeo e cole o link abaixo.</p>
+<label class="lb" for="vl">Ou link externo (Drive, Vimeo…)</label><div class="fld"><input id="vl" type="url" placeholder="https://"></div><div class="cn" id="m5" role="status"></div><button class="btn p">Enviar ao cliente</button></form>`
+:`<div class="glass pnl"><h2>Em andamento</h2><p class="mute">A equipe está cuidando do seu projeto. O vídeo aparece aqui quando for entregue.</p></div>`}`}
+function projects(){
+if(pj)return pjView(false);if(nw)return pjForm();
+const p=PL[me.plan],mine=PJ.filter(x=>x.user_id==me.id),pend=mine.filter(x=>x.status!='entregue').length,full=p.v-me.used.v-pend<=0;
+return`<div class="glass pnl gap"><h2>Meus projetos</h2>${p.v?bar('Vídeos',Math.min(p.v,me.used.v+pend),p.v)+(pend?`<p class="mute" style="font-size:13px">${pend} em andamento · ${Math.max(0,p.v-me.used.v-pend)} disponíveis</p>`:''):''}${p.l?bar('Landing page ou site',me.used.l,p.l):''}<p class="mute">Solicitações em andamento já contam no seu limite.</p>
+${p.v?`<button class="btn p" data-a="nw" ${full?'disabled':''}>+ Solicitar projeto</button>${full?'<p class="mute">Você atingiu o limite de vídeos do seu plano.</p>':''}`:''}</div>
+${p.v?`<div class="glass pnl"><h2>Solicitações</h2>${pjList(mine,false,'Nenhum projeto ainda. Solicite o primeiro.')}</div>`:''}`}
+const pjAdmin=()=>pj?pjView(true):`<div class="glass pnl"><h2>Projetos</h2>${pjList(PJ,true,'Nenhuma solicitação ainda.')}</div>`;
+const V={admin:{Dashboard:adminHome,Clientes:clientesV,Suporte:supportV,'Configurações':settingsV},client:{'Visão Geral':clientHome,'Meus Projetos':projects,Suporte:supportV,'Configurações':settingsV}};
+V.admin.Projetos=pjAdmin;
+function draw(){const A=me.role=='admin',nav=NAV[me.role],open=tickets().filter(t=>t.status!='resolvido'&&(A||t.email==me.email)).length;
+$('#nav').innerHTML=nav.map((n,i)=>`<button class="nv ${i==page?'on':''}" data-a="nav" data-i="${i}">${I(n[0])}<span>${n[1]}</span>${n[1]=='Suporte'&&open?`<i class="nb">${open}</i>`:''}</button>`).join('');
+const nm=nav[page][1],f=V[me.role][nm];$('#view').innerHTML=f?f():`<div class="glass pnl"><h2>${nm}</h2><p class="mute">Esta seção será conectada ao seu sistema.</p></div>`}
+const goSup=()=>{page=NAV[me.role].findIndex(n=>n[1]=='Suporte');tk=null;draw()};
+/* EVENTS */
+document.addEventListener('click',async e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+if(a=='mode'){mode=mode=='login'?'register':'login';auth()}
+else if(a=='eye'){const i=b.parentNode.querySelector('input');i.type=i.type=='password'?'text':'password'}
+else if(a=='forgot'){const e=$('#ae').value.trim();if(!e)return $('#er').textContent='Digite seu e-mail acima primeiro.';const{error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.href.split('#')[0]});$('#er').style.color=error?'':'#6ee7a0';$('#er').textContent=error?'Não foi possível enviar o e-mail.':'Enviamos um link para redefinir sua senha.'}
+else if(a=='nav'){page=+b.dataset.i;tk=null;pj=null;nw=false;draw()}
+else if(a=='goSup')goSup()
+else if(a=='tk'){tk=+b.dataset.id;draw()}
+else if(a=='back'){tk=null;draw()}
+else if(a=='res'){const t=tickets().find(x=>x.id==tk);await sb.from('tickets').update({status:t.status=='resolvido'?'aberto':'resolvido'}).eq('id',tk);await refresh();draw()}
+else if(a=='u'){const u=clients().find(x=>x.email==b.dataset.e),k=b.dataset.k,q=PL[u.plan][k=='v'?'v':'l'],val=Math.max(0,Math.min(q,u.used[k]+ +b.dataset.n));await sb.from('profiles').update(k=='v'?{used_videos:val}:{used_sites:val}).eq('id',u.id);await refresh();draw()}
+else if(a=='nw'){nw=true;draw()}
+else if(a=='pjx'){nw=false;draw()}
+else if(a=='pjb'){pj=null;draw()}
+else if(a=='pj'){pj=+b.dataset.id;SU=['',''];const p=PJ.find(x=>x.id==pj);if(p&&p.video_path){const[x,y]=await Promise.all([sb.storage.from('videos').createSignedUrl(p.video_path,3600),sb.storage.from('videos').createSignedUrl(p.video_path,3600,{download:true})]);SU=[x.data?.signedUrl||'',y.data?.signedUrl||'']}draw()}
+else if(a=='ps'){await sb.from('projects').update({status:b.dataset.s}).eq('id',pj);await refresh();draw()}
+else if(a=='csv')exportCsv()});
+document.addEventListener('submit',async e=>{e.preventDefault();const id=e.target.id;
+if(id=='af')await submitAuth();
+else if(id=='nf'){const{data:t,error}=await sb.from('tickets').insert({subject:$('#ns').value.trim()}).select().single();if(error)return;await sb.from('ticket_messages').insert({ticket_id:t.id,text:$('#nt').value.trim()});await refresh();draw()}
+else if(id=='rf'){const{error}=await sb.from('ticket_messages').insert({ticket_id:tk,text:$('#rt').value.trim()});if(!error){await refresh();draw()}}
+else if(id=='rq'){const m=$('#m4');say(m,'Enviando…','wait');const{error}=await sb.from('projects').insert({name:$('#qn').value.trim(),kind:$('#qk').value,format:$('#qf').value,deadline:$('#qd').value,brief:$('#qb').value.trim(),link:$('#ql').value.trim()||null});if(error){console.error(error);return say(m,'Não foi possível enviar: '+(error.message||error.code||'erro desconhecido'))}nw=false;await refresh();draw()}
+else if(id=='df'){const m=$('#m5'),p=PJ.find(x=>x.id==pj),l=$('#vl').value.trim();let f=$('#vf').files[0];if(!f&&!okUrl(l))return say(m,'Anexe um vídeo ou cole um link válido.');
+if(f&&f.size>MAXV){const mb=(f.size/1048576).toFixed(0);if(okUrl(l))f=null;else{$('#vl').focus();return say(m,`Este vídeo tem ${mb} MB e passa do limite de ${MAXV/1048576} MB para envio direto. Suba no Google Drive ou Vimeo e cole o link no campo abaixo.`)}}say(m,'Enviando… não feche esta tela.','wait');let path=null;
+if(f){path=`${p.user_id}/${p.id}-${Date.now()}.${(f.name.split('.').pop()||'mp4').replace(/\W/g,'')}`;try{await upVideo(f,path,pc=>say(m,'Enviando vídeo… '+pc+'% (não feche esta tela)','wait'))}catch(e){console.error(e);return say(m,'Falha no upload: '+(e.message||e)+'. Se o arquivo for grande, use o link externo (Drive/Vimeo).')}}
+const r2=await sb.from('projects').update({status:'entregue',video_path:path,video_link:f?null:l,delivered_at:new Date().toISOString()}).eq('id',p.id);if(r2.error){console.error(r2.error);return say(m,'Não foi possível concluir a entrega: '+r2.error.message)}
+const c=clients().find(x=>x.id==p.user_id);if(c)await sb.from('profiles').update({used_videos:Math.min(PL[c.plan].v,c.used.v+1)}).eq('id',c.id);
+pj=null;await refresh();draw()}
+else if(id=='sf'){const n=$('#cn').value.trim(),m=$('#m1');if(n.length<2)return say(m,'Digite um nome com pelo menos 2 letras.');say(m,'Salvando…','wait');
+const{error}=await sb.rpc('update_my_name',{new_name:n});if(error){console.error(error);return say(m,'Não foi possível salvar o nome.')}
+me.name=n;const f=n.split(' ')[0];$('#ini').textContent=f[0].toUpperCase();$('#nm').textContent=f;say(m,'Nome atualizado!','ok')}
+else if(id=='pf'){const a=$('#np').value,b=$('#np2').value,m=$('#m2');if(a.length<6)return say(m,'A senha precisa ter pelo menos 6 caracteres.');if(a!=b)return say(m,'As senhas não coincidem.');say(m,'Salvando…','wait');
+const{error}=await sb.auth.updateUser({password:a});if(error)return say(m,/different|same/i.test(error.message)?'A nova senha deve ser diferente da atual.':'Não foi possível alterar a senha.');
+$('#np').value=$('#np2').value='';say(m,'Senha alterada com sucesso!','ok')}});
+$('#out').onclick=logout;$('#lg').src=LOGO;
+sb.auth.onAuthStateChange(async(ev)=>{if(ev=='PASSWORD_RECOVERY'){const np=prompt('Digite sua nova senha (mínimo 6 caracteres):');if(np&&np.length>=6){const{error}=await sb.auth.updateUser({password:np});alert(error?'Não foi possível alterar a senha.':'Senha alterada com sucesso!')}}});
+sb.auth.getSession().then(({data})=>data.session?start(data.session):auth());
+setInterval(async()=>{if(!me||/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;await refresh();if(!cfgOpen())draw()},20000);
+</script></body></html>

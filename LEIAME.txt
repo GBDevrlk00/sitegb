@@ -1,0 +1,8 @@
+GB Filmmaker - Protótipo de projetos
+
+Como publicar no Netlify:
+1. Acesse app.netlify.com/drop
+2. Arraste a pasta "gb-filmmaker" (ou o zip extraído) para a página.
+
+Observação: os dados ficam só na memória da página (somem ao recarregar).
+Para uso real, conecte um backend (ex.: Supabase) para login, projetos e armazenamento dos vídeos.
