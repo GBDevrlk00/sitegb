@@ -132,8 +132,11 @@ input:not([type=checkbox]):not([type=radio]),textarea{font-size:16px}
 .kv>span:first-child{min-width:0;overflow-wrap:anywhere}
 .fld select{flex:1;min-width:0;background:none;border:0;color:inherit;font:inherit;padding:15px 0;outline:0}.fld select option{color:#111}.fld input[type=file]{padding:12px 0}.fld input[type=date]{color-scheme:dark}video{max-width:100%}
 .btn:disabled{opacity:.45;filter:grayscale(.8);box-shadow:none;cursor:not-allowed;pointer-events:none}
-</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.1.0/dist/tus.min.js"></script></head><body><div class="bg"></div>
-<section id="login"></section>
+/* fundo do login e cadastro */
+#login{background:#000 url(login-bg.webp) center/cover no-repeat}
+@media(orientation:landscape){#login{background-position:center top}}
+@keyframes skm{to{transform:translateX(100%)}}.sk-b{position:relative;overflow:hidden;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.05)}.sk-b::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,31,61,.2),rgba(255,255,255,.08),transparent);animation:skm 1.5s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.sk-b::after{animation:none}}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script><script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.1.0/dist/tus.min.js"></script></head><body><div class="bg"></div>
+<section id="login"><div class="glass ac" aria-busy="true" aria-label="Carregando"><div class="sk-b" style="width:112px;height:64px;margin:0 auto 10px"></div><div class="sk-b" style="width:62%;height:34px;margin:0 auto"></div><div class="sk-b" style="height:54px;border-radius:16px"></div><div class="sk-b" style="height:54px;border-radius:16px"></div><div class="sk-b" style="height:48px;border-radius:99px"></div><div class="sk-b" style="width:55%;height:14px;margin:4px auto 0"></div></div></section>
 <div id="app">
 <aside class="glass"><img class="logo" id="lg" width="77" height="44" alt="GB"><nav id="nav" style="display:contents"></nav><div class="sp"></div><button class="nv" id="out"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Sair do painel</span></button></aside>
 <main><div class="top glass"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg><input placeholder="Buscar…"><div class="av"><b id="ini"></b><div><span id="nm"></span><small id="rl"></small></div></div></div>

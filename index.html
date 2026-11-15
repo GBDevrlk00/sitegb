@@ -81,8 +81,8 @@ nav a:hover{color:#fff}nav a.on{color:#fff;background:rgba(255,255,255,.1)}
 .card::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .4s;background:radial-gradient(320px circle at var(--x,50%) var(--y,0%),rgba(255,31,61,.2),transparent 65%)}
 .card:hover{border-color:rgba(255,31,61,.45);transform:translateY(-4px)}.card:hover::before{opacity:1}
 .fm{display:flex;align-items:flex-end;gap:10px;height:64px;margin-bottom:auto}
-.fm i{height:100%;aspect-ratio:var(--ar);border:1.5px solid var(--red);border-radius:7px;background:rgba(255,31,61,.1);box-shadow:0 0 22px rgba(255,31,61,.25)}
-.fm small{font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.fm img{height:100%;width:auto;display:block;object-fit:contain;filter:drop-shadow(0 0 14px rgba(255,31,61,.55));transition:filter .4s,transform .4s}.card:hover .fm img{filter:drop-shadow(0 0 20px rgba(255,31,61,.85));transform:scale(1.06)}
+
 .card h3{font-size:1.3rem;line-height:1.15;letter-spacing:-.02em}
 .card p{font-size:.92rem;color:var(--mute);line-height:1.55}
 .go{margin-top:6px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.3s}
@@ -218,8 +218,11 @@ body::before{background:rgba(5,4,5,.5);-webkit-backdrop-filter:var(--gl-blur);ba
 @media(max-width:420px){.acts{flex-direction:column}.acts .btn{flex:none;width:100%;justify-content:center}}
 @media(pointer:coarse){.btn.sm{padding:11px 18px}}
 </style>
+<style>@keyframes skm{to{transform:translateX(100%)}}.sk-b{position:relative;overflow:hidden;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.05)}.sk-b::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,31,61,.2),rgba(255,255,255,.08),transparent);animation:skm 1.5s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.sk-b::after{animation:none}}#sk{display:none;position:fixed;inset:0;z-index:99999;background:#050405;overflow:hidden;transition:opacity .6s ease,visibility .6s}html.sk #sk,#sk.out{display:block}#sk.out{opacity:0;visibility:hidden;pointer-events:none}html.sk{overflow:hidden}.sk-w{width:min(1200px,calc(100% - 40px));margin-inline:auto}.sk-hd{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:calc(env(safe-area-inset-top,0px) + 18px)}.sk-hero{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:clamp(40px,8vh,90px)}.sk-t1{width:min(720px,88%);height:clamp(44px,8vw,92px);border-radius:18px}.sk-t2{width:min(520px,66%);height:clamp(44px,8vw,92px);border-radius:18px}.sk-p{width:min(560px,86%);height:16px;border-radius:8px}.sk-p2{width:min(420px,64%);height:16px;border-radius:8px}.sk-row{display:flex;gap:12px;margin-top:10px}.sk-btn{width:min(170px,40vw);height:48px;border-radius:99px}.sk-g{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:16px;margin-top:clamp(40px,8vh,80px)}.sk-c{border-radius:24px;height:260px}@media(max-width:900px){.sk-nv{display:none}.sk-g{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.sk-g{grid-template-columns:1fr}}</style>
+<script>document.documentElement.classList.add('sk')</script>
 </head>
 <body>
+<div id="sk" aria-hidden="true"><div class="sk-w sk-hd"><div class="sk-b" style="width:132px;height:36px"></div><div class="sk-b sk-nv" style="width:min(420px,40%);height:48px;border-radius:99px"></div><div class="sk-b" style="width:118px;height:44px;border-radius:99px"></div></div><div class="sk-w sk-hero"><div class="sk-b sk-t1"></div><div class="sk-b sk-t2"></div><div class="sk-b sk-p"></div><div class="sk-b sk-p2"></div><div class="sk-row"><div class="sk-b sk-btn"></div><div class="sk-b sk-btn"></div></div></div><div class="sk-w sk-g" style="--n:4"><div class="sk-b sk-c" style=""></div><div class="sk-b sk-c" style=""></div><div class="sk-b sk-c" style=""></div><div class="sk-b sk-c" style=""></div></div></div>
 <div class="bg"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ar" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
 
@@ -294,10 +297,10 @@ body::before{background:rgba(5,4,5,.5);-webkit-backdrop-filter:var(--gl-blur);ba
         <a class="btn" href="trabalhos.html">Ver todos os trabalhos <svg><use href="#ar"/></svg></a>
       </div>
       <div class="g4">
-        <a class="card rv" style="--d:0s" href="trabalhos.html"><div class="fm"><i style="--ar:21/9"></i><small>21:9</small></div><h3>Vídeos comerciais</h3><p>Vídeos para apresentar produtos, serviços e campanhas.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
-        <a class="card rv" style="--d:.08s" href="trabalhos.html"><div class="fm"><i style="--ar:9/16"></i><small>9:16</small></div><h3>Vídeos para redes sociais</h3><p>Conteúdo pensado para Instagram, TikTok e outras plataformas.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
-        <a class="card rv" style="--d:.16s" href="trabalhos.html"><div class="fm"><i style="--ar:16/9"></i><small>16:9</small></div><h3>Vídeos institucionais</h3><p>Apresente sua empresa, equipe e história de forma profissional.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
-        <a class="card rv" style="--d:.24s" href="trabalhos.html"><div class="fm"><i style="--ar:1/1"></i><small>1:1</small></div><h3>Conteúdo para marcas</h3><p>Produções audiovisuais para fortalecer a identidade da sua marca.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
+        <a class="card rv" style="--d:0s" href="trabalhos.html"><div class="fm"><img src="raio.png" alt="" width="39" height="64" loading="lazy" decoding="async"></div><h3>Vídeos comerciais</h3><p>Vídeos para apresentar produtos, serviços e campanhas.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
+        <a class="card rv" style="--d:.08s" href="trabalhos.html"><div class="fm"><img src="raio.png" alt="" width="39" height="64" loading="lazy" decoding="async"></div><h3>Vídeos para redes sociais</h3><p>Conteúdo pensado para Instagram, TikTok e outras plataformas.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
+        <a class="card rv" style="--d:.16s" href="trabalhos.html"><div class="fm"><img src="raio.png" alt="" width="39" height="64" loading="lazy" decoding="async"></div><h3>Vídeos institucionais</h3><p>Apresente sua empresa, equipe e história de forma profissional.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
+        <a class="card rv" style="--d:.24s" href="trabalhos.html"><div class="fm"><img src="raio.png" alt="" width="39" height="64" loading="lazy" decoding="async"></div><h3>Conteúdo para marcas</h3><p>Produções audiovisuais para fortalecer a identidade da sua marca.</p><span class="go"><svg><use href="#ar"/></svg></span></a>
       </div>
     </div>
   </section>
@@ -350,7 +353,7 @@ body::before{background:rgba(5,4,5,.5);-webkit-backdrop-filter:var(--gl-blur);ba
   <section class="sec" id="contato" data-k="home:contato" style="padding-top:0">
     <div class="wrap">
       <div class="cta rv">
-        <h2>Tem uma ideia? Vamos transformá-la em vídeo<i class="dt">.</i></h2>
+        <h2>Tem uma ideia? Vamos transformá-la em realidade<i class="dt">.</i></h2>
         <p>Conte o que você precisa e receba uma proposta direto no WhatsApp.</p>
         <div class="acts" style="animation:none">
           <a class="btn p" data-wa href="#">Solicitar orçamento <svg><use href="#ar"/></svg></a>
@@ -408,5 +411,5 @@ if(tc&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
   })(0);
 }
 </script>
-</body>
+<script>(function(){var d=document.documentElement,S=document.getElementById('sk');if(!S)return;var t0=Date.now(),done=0;function end(){if(done)return;done=1;S.classList.add('out');d.classList.remove('sk');setTimeout(function(){S.remove()},700)}function ready(){setTimeout(end,Math.max(0,1800-(Date.now()-t0)))}if(document.readyState=='complete')ready();else addEventListener('load',ready);setTimeout(end,5000)})();</script></body>
 </html>

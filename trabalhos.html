@@ -217,9 +217,12 @@ body::before{background:rgba(5,4,5,.5);-webkit-backdrop-filter:var(--gl-blur);ba
 @media(max-width:600px){.hero2::before{content:"";position:absolute;inset:auto 0 0;height:56px;background:linear-gradient(0deg,var(--ink),transparent);z-index:4;pointer-events:none}}
 @media(max-width:420px){.acts{flex-direction:column}.acts .btn{flex:none;width:100%;justify-content:center}}
 @media(pointer:coarse){.btn.sm{padding:11px 18px}}
-</style>
+.poster .sk-fill{position:absolute;inset:0;border-radius:0;border:0;z-index:2;pointer-events:none;background:#0b090c}</style>
+<style>@keyframes skm{to{transform:translateX(100%)}}.sk-b{position:relative;overflow:hidden;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.05)}.sk-b::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,31,61,.2),rgba(255,255,255,.08),transparent);animation:skm 1.5s ease-in-out infinite}@media(prefers-reduced-motion:reduce){.sk-b::after{animation:none}}#sk{display:none;position:fixed;inset:0;z-index:99999;background:#050405;overflow:hidden;transition:opacity .6s ease,visibility .6s}html.sk #sk,#sk.out{display:block}#sk.out{opacity:0;visibility:hidden;pointer-events:none}html.sk{overflow:hidden}.sk-w{width:min(1200px,calc(100% - 40px));margin-inline:auto}.sk-hd{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:calc(env(safe-area-inset-top,0px) + 18px)}.sk-hero{display:flex;flex-direction:column;align-items:center;gap:16px;padding-top:clamp(40px,8vh,90px)}.sk-t1{width:min(720px,88%);height:clamp(44px,8vw,92px);border-radius:18px}.sk-t2{width:min(520px,66%);height:clamp(44px,8vw,92px);border-radius:18px}.sk-p{width:min(560px,86%);height:16px;border-radius:8px}.sk-p2{width:min(420px,64%);height:16px;border-radius:8px}.sk-row{display:flex;gap:12px;margin-top:10px}.sk-btn{width:min(170px,40vw);height:48px;border-radius:99px}.sk-g{display:grid;grid-template-columns:repeat(var(--n,4),1fr);gap:16px;margin-top:clamp(40px,8vh,80px)}.sk-c{border-radius:24px;height:260px}@media(max-width:900px){.sk-nv{display:none}.sk-g{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.sk-g{grid-template-columns:1fr}}</style>
+<script>document.documentElement.classList.add('sk')</script>
 </head>
 <body>
+<div id="sk" aria-hidden="true"><div class="sk-w sk-hd"><div class="sk-b" style="width:132px;height:36px"></div><div class="sk-b sk-nv" style="width:min(420px,40%);height:48px;border-radius:99px"></div><div class="sk-b" style="width:118px;height:44px;border-radius:99px"></div></div><div class="sk-w sk-hero"><div class="sk-b sk-t1"></div><div class="sk-b sk-t2"></div><div class="sk-b sk-p"></div><div class="sk-b sk-p2"></div><div class="sk-row"><div class="sk-b sk-btn"></div><div class="sk-b sk-btn"></div></div></div><div class="sk-w sk-g" style="--n:3"><div class="sk-b sk-c" style="height:auto;aspect-ratio:9/16"></div><div class="sk-b sk-c" style="height:auto;aspect-ratio:9/16"></div><div class="sk-b sk-c" style="height:auto;aspect-ratio:9/16"></div></div></div>
 <div class="bg"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="ar" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
 
@@ -300,12 +303,12 @@ $('#reels').innerHTML=IDS.map((id,i)=>{const n=String(i+1).padStart(2,'0');retur
 /* Player do reel (carrega só ao clicar) */
 document.addEventListener('click',e=>{
   const p=e.target.closest('.pl');
-  if(p)p.parentElement.innerHTML=`<iframe src="https://www.instagram.com/reel/${p.dataset.id}/embed" title="Projeto ${p.dataset.n}" allowfullscreen loading="lazy" allow="autoplay; encrypted-media; picture-in-picture"></iframe>`;
+  if(p){const po=p.parentElement;po.innerHTML=`<div class="sk-b sk-fill"></div><iframe src="https://www.instagram.com/reel/${p.dataset.id}/embed" title="Projeto ${p.dataset.n}" allowfullscreen loading="lazy" allow="autoplay; encrypted-media; picture-in-picture"></iframe>`;const fr=po.querySelector('iframe');fr.addEventListener('load',()=>{const k=po.querySelector('.sk-fill');if(k)k.remove()});setTimeout(()=>{const k=po.querySelector('.sk-fill');if(k)k.remove()},15000)}
 });
 
 /* Revelar ao rolar */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12,rootMargin:'0px 0px -6% 0px'});
 $$('.rv,.steps').forEach(e=>io.observe(e));
 </script>
-</body>
+<script>(function(){var d=document.documentElement,S=document.getElementById('sk');if(!S)return;var t0=Date.now(),done=0;function end(){if(done)return;done=1;S.classList.add('out');d.classList.remove('sk');setTimeout(function(){S.remove()},700)}function ready(){setTimeout(end,Math.max(0,1800-(Date.now()-t0)))}if(document.readyState=='complete')ready();else addEventListener('load',ready);setTimeout(end,5000)})();</script></body>
 </html>
