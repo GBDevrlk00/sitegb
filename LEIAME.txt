@@ -1,0 +1,83 @@
+GB Filmmaker - Site + painel de clientes (v30, com integração Cakto)
+
+COMO PUBLICAR O SITE (Netlify)
+1. Acesse app.netlify.com/drop
+2. Arraste a pasta "gb-filmmaker" (ou o zip extraído) para a página.
+
+INTEGRAÇÃO COM A CAKTO (pagamento dos planos)
+Fluxo: cliente cria a conta -> painel mostra "Ative seu plano" -> paga no checkout da Cakto
+-> a Cakto avisa o webhook -> a função libera o plano -> o painel destrava sozinho.
+Conta nova nasce SEM plano; só a confirmação de pagamento da Cakto libera.
+
+Arquivos novos:
+- cakto.sql                                  rodar UMA vez no Supabase (SQL Editor)
+- supabase/functions/cakto-webhook/index.ts  Edge Function que recebe o webhook
+
+Passo a passo:
+1. Cakto: já criados (assinatura mensal): Master R$ 280, Dev R$ 120, Pro R$ 100.
+   Mais o plano Teste (R$ 5, pagamento único; a Cakto não aceita menos que R$ 5).
+2. Supabase > SQL Editor: rodar cakto.sql.
+3. O próprio cakto.sql já cadastra os 3 produtos (product_id, plano, oferta e link do checkout).
+4. Supabase > Edge Functions: publicar "cakto-webhook" com "Verify JWT" DESLIGADO
+   (quem chama é a Cakto, não um usuário logado).
+5. Supabase > Edge Functions > Secrets: criar CAKTO_WEBHOOK_SECRET com o "secret" do webhook da Cakto.
+6. Cakto > Webhooks: URL https://uwfzcbomuwbxvfrubwjd.supabase.co/functions/v1/cakto-webhook
+   Eventos: purchase_approved, refund, chargeback, subscription_renewed, subscription_canceled,
+   subscription_late_recovered, subscription_resumed.
+7. Publicar este site (logo depois do passo 2) e testar com o "Testar Webhook" da Cakto (o log aparece nos logs da função).
+
+Regras aplicadas pelo webhook:
+- compra aprovada (ou renovação): ativa o plano e zera a cota de vídeos/sites;
+- reembolso, chargeback ou assinatura cancelada: remove o plano (só se for o plano que aquela compra liberou);
+- o cliente é identificado pelo token "callback" do link (id do usuário); se faltar, pelo e-mail da compra;
+- compra sem usuário correspondente fica em cakto_events com result = 'sem_usuario' (reenvie o evento pela Cakto
+  depois de o cliente ter conta);
+- cada evento é processado uma vez só (a Cakto pode reenviar sem duplicar);
+- se a função responder erro, a Cakto NÃO reenvia sozinha: reenvie pelo histórico de webhooks da Cakto.
+
+PLANO TESTE (para validar o pagamento de ponta a ponta)
+- Aparece no cadastro e na tela de pagamento, junto com Master, Pro e Dev (R$ 5, pagamento único; dá 1 vídeo de cota).
+- Para esconder dos clientes depois de testar: em painel-gb.html troque "const SHOW_TESTE=true;" por
+  "const SHOW_TESTE=false;" e publique de novo. Com false, o Teste só aparece em quem abrir o painel
+  com ?teste=1 no endereço (?teste=0 esconde de novo).
+- Pause também o produto "Plano Teste" na Cakto, para ninguém conseguir pagar por ele.
+
+APAGAR CONTA DE CLIENTE (somente admin)
+- Painel > Clientes > botão "Excluir" ao lado de cada cliente. Pede para digitar EXCLUIR.
+- Apaga, para sempre: acesso (login), perfil, projetos, chamados e mensagens, e os vídeos do cliente no storage.
+- Não cancela a assinatura na Cakto: cancele por lá se o cliente tinha plano ativo.
+- Não dá para apagar admins nem a própria conta. A regra é aplicada no banco (admin-apagar-cliente.sql).
+- Se algum vídeo não puder ser apagado, a conta NÃO é apagada e o painel avisa.
+- Os registros de pagamento (cakto_events) ficam guardados para auditoria.
+
+ESPAÇAMENTO ENTRE CARDS
+- Um único valor controla todos os espaços entre cards do painel: a variável --gp, no fim do CSS de painel-gb.html
+  (20px no computador, 16px no tablet, 14px no celular). Para mudar o espaço em todas as telas, altere só ela.
+
+PORTFÓLIO (página Trabalhos gerenciada pelo Admin) - v28
+No painel (login de admin) há a aba "Portfólio": adiciona, edita e remove vídeos (Instagram, YouTube, Vimeo) e sites,
+com capa opcional e ordem (setas ↑ ↓). A página Trabalhos lê tudo dessa lista.
+1. Supabase > SQL Editor: rodar portfolio.sql UMA vez (precisa do projetos.sql já rodado).
+   Ele já cadastra os 6 reels que estavam no site, então nada some.
+2. Publicar o site de novo (painel-gb.html e trabalhos.html mudaram).
+Enquanto o portfolio.sql não for rodado, a página Trabalhos continua mostrando os 6 reels antigos.
+
+PÁGINA DE PLANOS - v29
+Nova página planos.html (aba "Planos" no menu) com Pro R$ 100, Master R$ 280 e Dev R$ 120 (mensal).
+Todos os botões "Solicitar orçamento" do site viraram "Conferir planos" e levam para ela.
+"Escolher plano" abre o cadastro no painel já com o plano marcado (painel-gb.html?plano=pro|master|dev).
+Se mudar preço ou benefício de um plano, edite os cards em planos.html (e PL no painel-gb.html).
+O WhatsApp continua só no fim da página de planos ("Falar no WhatsApp").
+
+ASSINATURA COM CONTAGEM DE DIAS - v30
+Na Visão Geral do cliente há o card "Sua Assinatura": dias restantes (barra em formato de bateria), início e próxima renovação.
+O botão "Renovar" só aparece quando faltam 3 dias ou menos (e continua aparecendo se vencer). Ele abre o checkout da Cakto
+do plano do cliente; quando o pagamento é aprovado, o webhook zera a cota de vídeos/sites e soma 1 mês à renovação
+(renovar antes do vencimento não perde dias) e o painel se atualiza sozinho em até 20 segundos.
+1. Supabase > SQL Editor: rodar assinatura.sql UMA vez (depois do cakto.sql). Ele cria as datas, trava a edição pelo cliente,
+   atualiza a função do webhook e preenche os clientes que já pagam a partir do histórico em cakto_events.
+   Não precisa publicar a Edge Function de novo (cakto-webhook não mudou).
+2. Publicar o site de novo (painel-gb.html mudou). Enquanto o passo 1 não for feito, o card simplesmente não aparece.
+- Cliente com plano dado manualmente pelo admin (sem pagamento registrado) não tem datas e não vê o card até a próxima compra aprovada.
+- Para mudar o aviso de 3 dias, altere SUB_WARN em painel-gb.html; o período da barra (30 dias) é SUB_PER.
+- Reembolso, chargeback ou cancelamento apagam as datas junto com o plano.
