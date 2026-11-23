@@ -1,8 +1,8 @@
-GB Filmmaker - Site + painel de clientes (v30, com integração Cakto)
+GB Filmmaker - Site + painel de clientes (v37, com integração Cakto)
 
 COMO PUBLICAR O SITE (Netlify)
 1. Acesse app.netlify.com/drop
-2. Arraste a pasta "gb-filmmaker" (ou o zip extraído) para a página.
+2. Arraste esta pasta "gb-filmmaker" para a página.
 
 INTEGRAÇÃO COM A CAKTO (pagamento dos planos)
 Fluxo: cliente cria a conta -> painel mostra "Ative seu plano" -> paga no checkout da Cakto
@@ -10,14 +10,14 @@ Fluxo: cliente cria a conta -> painel mostra "Ative seu plano" -> paga no checko
 Conta nova nasce SEM plano; só a confirmação de pagamento da Cakto libera.
 
 Arquivos novos:
-- cakto.sql                                  rodar UMA vez no Supabase (SQL Editor)
-- supabase/functions/cakto-webhook/index.ts  Edge Function que recebe o webhook
+- 03-cakto.sql                                  rodar UMA vez no Supabase (SQL Editor)
+- funcao-cakto-webhook.ts (código da função "cakto-webhook")  Edge Function que recebe o webhook
 
 Passo a passo:
 1. Cakto: já criados (assinatura mensal): Master R$ 280, Dev R$ 120, Pro R$ 100.
    Mais o plano Teste (R$ 5, pagamento único; a Cakto não aceita menos que R$ 5).
-2. Supabase > SQL Editor: rodar cakto.sql.
-3. O próprio cakto.sql já cadastra os 3 produtos (product_id, plano, oferta e link do checkout).
+2. Supabase > SQL Editor: rodar 03-cakto.sql.
+3. O próprio 03-cakto.sql já cadastra os 3 produtos (product_id, plano, oferta e link do checkout).
 4. Supabase > Edge Functions: publicar "cakto-webhook" com "Verify JWT" DESLIGADO
    (quem chama é a Cakto, não um usuário logado).
 5. Supabase > Edge Functions > Secrets: criar CAKTO_WEBHOOK_SECRET com o "secret" do webhook da Cakto.
@@ -46,7 +46,7 @@ APAGAR CONTA DE CLIENTE (somente admin)
 - Painel > Clientes > botão "Excluir" ao lado de cada cliente. Pede para digitar EXCLUIR.
 - Apaga, para sempre: acesso (login), perfil, projetos, chamados e mensagens, e os vídeos do cliente no storage.
 - Não cancela a assinatura na Cakto: cancele por lá se o cliente tinha plano ativo.
-- Não dá para apagar admins nem a própria conta. A regra é aplicada no banco (admin-apagar-cliente.sql).
+- Não dá para apagar admins nem a própria conta. A regra é aplicada no banco (06-admin-apagar-cliente.sql).
 - Se algum vídeo não puder ser apagado, a conta NÃO é apagada e o painel avisa.
 - Os registros de pagamento (cakto_events) ficam guardados para auditoria.
 
@@ -57,10 +57,10 @@ ESPAÇAMENTO ENTRE CARDS
 PORTFÓLIO (página Trabalhos gerenciada pelo Admin) - v28
 No painel (login de admin) há a aba "Portfólio": adiciona, edita e remove vídeos (Instagram, YouTube, Vimeo) e sites,
 com capa opcional e ordem (setas ↑ ↓). A página Trabalhos lê tudo dessa lista.
-1. Supabase > SQL Editor: rodar portfolio.sql UMA vez (precisa do projetos.sql já rodado).
+1. Supabase > SQL Editor: rodar 02-portfolio.sql UMA vez (precisa do 01-projetos.sql já rodado).
    Ele já cadastra os 6 reels que estavam no site, então nada some.
 2. Publicar o site de novo (painel-gb.html e trabalhos.html mudaram).
-Enquanto o portfolio.sql não for rodado, a página Trabalhos continua mostrando os 6 reels antigos.
+Enquanto o 02-portfolio.sql não for rodado, a página Trabalhos continua mostrando os 6 reels antigos.
 
 PÁGINA DE PLANOS - v29
 Nova página planos.html (aba "Planos" no menu) com Pro R$ 100, Master R$ 280 e Dev R$ 120 (mensal).
@@ -74,10 +74,57 @@ Na Visão Geral do cliente há o card "Sua Assinatura": dias restantes (barra em
 O botão "Renovar" só aparece quando faltam 3 dias ou menos (e continua aparecendo se vencer). Ele abre o checkout da Cakto
 do plano do cliente; quando o pagamento é aprovado, o webhook zera a cota de vídeos/sites e soma 1 mês à renovação
 (renovar antes do vencimento não perde dias) e o painel se atualiza sozinho em até 20 segundos.
-1. Supabase > SQL Editor: rodar assinatura.sql UMA vez (depois do cakto.sql). Ele cria as datas, trava a edição pelo cliente,
+1. Supabase > SQL Editor: rodar 04-assinatura.sql UMA vez (depois do 03-cakto.sql). Ele cria as datas, trava a edição pelo cliente,
    atualiza a função do webhook e preenche os clientes que já pagam a partir do histórico em cakto_events.
    Não precisa publicar a Edge Function de novo (cakto-webhook não mudou).
 2. Publicar o site de novo (painel-gb.html mudou). Enquanto o passo 1 não for feito, o card simplesmente não aparece.
 - Cliente com plano dado manualmente pelo admin (sem pagamento registrado) não tem datas e não vê o card até a próxima compra aprovada.
 - Para mudar o aviso de 3 dias, altere SUB_WARN em painel-gb.html; o período da barra (30 dias) é SUB_PER.
 - Reembolso, chargeback ou cancelamento apagam as datas junto com o plano.
+
+AJUSTE DE DIAS PELO ADMIN - v31
+Em Clientes, cada cliente com plano tem a linha "Assinatura: data · dias" com um campo de dias (1 a 365) e os botões
+"- Remover dias" e "+ Adicionar dias". Adicionar soma à renovação atual (se já venceu, soma a partir de hoje); remover subtrai
+da renovação e pode deixar a assinatura vencida. Cliente sem data aceita "Adicionar" (começa a contar de hoje).
+Só o admin consegue gravar essas datas (a trava do 04-assinatura.sql bloqueia o cliente).
+
+CORREÇÃO "permission denied for table profiles" - v32
+Na v31, os botões de dias davam o erro "Não foi possível alterar os dias: permission denied for table profiles", porque o
+navegador (papel "authenticated") não tem permissão de UPDATE na tabela profiles. Agora o painel grava por funções do banco
+que só funcionam para admin, sem abrir a tabela.
+1. Supabase > SQL Editor: rodar 05-admin-ajustar-assinatura.sql UMA vez (depois do 04-assinatura.sql).
+2. Publicar o site de novo (painel-gb.html mudou).
+Isso também conserta os botões de cota de vídeos/sites em Clientes e o "+1 vídeo usado" ao marcar um projeto como entregue,
+que gravavam em profiles do mesmo jeito.
+
+BLOQUEIO POR ASSINATURA VENCIDA - v33
+Quando os dias restantes do cliente chegam a 0 (data de renovação = hoje ou já passou), o painel é bloqueado: some o menu
+e aparece apenas a tela "Sua assinatura venceu" com o botão "Renovar assinatura" (checkout da Cakto do plano do cliente).
+Quando a Cakto confirma o pagamento, o webhook (purchase_approved / subscription_renewed) soma 1 mês à data de renovação
+(a partir de hoje, se já tinha vencido), e o painel destrava sozinho em até 5 segundos, já com os dias atualizados.
+- Só painel-gb.html mudou: não precisa rodar SQL nem publicar a Edge Function de novo.
+- Clientes sem data de renovação (plano dado manualmente pelo admin) não são bloqueados.
+- Admin pode devolver acesso a qualquer momento em Clientes > "+ Adicionar dias".
+
+POP-UPS EM CARROSSEL NO DASHBOARD - v34
+Admin > aba "Pop-ups": cadastra, edita, exclui, oculta/ativa e reordena (↑ ↓) anúncios, cada um com título, texto, imagem,
+link (botão com texto personalizável) e a opção "Exibir para os clientes". O botão "Pré-visualizar" mostra o carrossel como o cliente vê.
+Para o cliente: ao abrir a Visão Geral (Dashboard), aparece um pop-up com os anúncios ativos, que se navega deslizando para
+os lados (dedo no celular, arrastar com o mouse, setas do teclado, botões ‹ › ou pontinhos). Fecha no X, fora do pop-up ou com Esc.
+Aparece uma vez por sessão e só na Visão Geral: nunca em Projetos, Suporte, Configurações, no painel Admin ou no site.
+Volta a aparecer se o admin cadastrar um anúncio novo.
+1. Supabase > SQL Editor: rodar 07-popups.sql UMA vez (tabela popups + bucket de imagens "popups").
+2. Publicar o site de novo (painel-gb.html mudou).
+Sem o passo 1 a aba Pop-ups mostra um aviso e os clientes não veem nada.
+
+CARD "SUA ASSINATURA" MENOR - v35
+Só o CSS do card (.sub no painel-gb.html) foi reduzido (~35%): título, bateria, datas e botão Renovar. Nada mais mudou.
+
+TEMA CLARO / ESCURO - v36
+Botão de sol/lua no topo do painel (e no canto da tela de login) alterna entre tema escuro e claro. A escolha fica salva no
+navegador de cada pessoa (padrão: escuro). Só o painel-gb.html mudou; não precisa rodar SQL.
+Aproveitei para ajustar a lista de pop-ups no Admin: os botões agora ficam abaixo do título, que antes era espremido.
+
+LOGO NO TEMA CLARO - v37
+Novo arquivo logo-gb-dark.png (G vermelho e B preto, fundo transparente). O painel usa ele sozinho no tema claro
+(menu lateral e tela de login) e volta para logo-gb.png no tema escuro. Suba o arquivo junto com o painel-gb.html.
